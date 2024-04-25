@@ -1,0 +1,79 @@
+---
+title: "2DA3_A6"
+author: "Jingru Feng"
+date: "2023-12-05"
+output: pdf_document
+---
+#Question 1
+```{r}
+library(MASS)
+library(class)
+library(e1071)
+#install.packages("caret")
+library(caret)
+```
+##a)
+```{r}
+set.seed(1234)
+data(crabs)
+train_set <- sample(1:nrow(crabs),140)
+train_val_set <- crabs[train_set, ]
+test_set <- crabs[-train_set, ]
+```
+##b)
+```{r}
+train.x <- train_val_set[, 4:8]
+train.y <- train_val_set$sp
+```
+##c)
+```{r}
+tune_result <- tune.knn(train.x, train.y, k=1:10, tunecontrol = tune.control(cross = 5))
+tune_result
+```
+##d)
+The best value of K is 1.
+```{r}
+best_k <- tune_result$best.model$k
+best_k
+```
+##e)
+```{r}
+plot(tune_result)
+```
+##f)
+```{r}
+knn_pred <- knn(train = train_val_set[, 4:8], test = test_set[, 4:8], cl = train_val_set$sp, k = best_k)
+knn_pred
+```
+##g)
+```{r}
+confusion_matrix <- table(Predicted = knn_pred, Actual = test_set$sp)
+confusion_matrix
+```
+##h)
+The mis-classification rate is 0.08333333.
+```{r}
+correct_predictions <- sum(diag(confusion_matrix))
+total_predictions <- sum(confusion_matrix)
+misclass_rate <- (total_predictions - correct_predictions) / total_predictions
+misclass_rate
+
+```
+##i)
+The ARI is 0.689.
+```{r}
+library(mclust)
+ari_value <- adjustedRandIndex(test_set$sp, knn_pred)
+ari_value <- round(ari_value,3)
+ari_value
+```
+#Question 2
+##a) 0.35
+35% of people in the dataset actually have a malignant tumour.
+
+##b) 4 people
+200*2%=4
+
+##c) 126 people
+58% + 3% + 2% = 63%
+200*63%=126

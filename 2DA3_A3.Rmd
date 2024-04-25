@@ -1,0 +1,67 @@
+---
+title: "2DA3_A3"
+author: "Jingru Feng"
+date: "2023-10-29"
+output: pdf_document
+---
+#Question 1
+##a)CLuster Dendrogram 2 shows evidence of Chaining. 
+
+#Question 2
+##a)The misclassification rate for Table 1 is 27%.
+rate=(5+22)/100=27%
+##b)The misclassification rate for Table 2 is 27%.
+rate=(22+5)/100=27%
+##c)According to node purity, Table 1 gives the best clustering result. 
+For B in Table2, there are 22 observations belong to class1 and 50 observations belong to class2. We treat all 72 values as class2, which contains too many values of class1. In contrast, in Table1, only 5 observations of B belong to class1. So Table 1 is the best clustering result. 
+
+#Question 3
+##a)
+Linear Discriminant Analysis: 
+the observastions are independence; the observations are Normal Distribution; all classes share the same covariance matrix
+Quadratic Discriminant Analysis:
+the observastions are independence; the observations are Normal Distribution
+##b) 
+In Quadratic Discriminant Analysis, since each class can be determined by its own covariance matrix, the decision boundary between classes can be a quadratic function.
+
+#Question 4
+##a)There are 210 observations in the dataset.
+```{r}
+seeds <- read.csv("/Users/fengjingru/Desktop/seeds.csv")
+head(seeds)
+str(seeds)
+```
+##b)
+```{r}
+seeds$Class <- as.factor(seeds$Class)
+str(seeds)
+```
+##c)
+```{r}
+set.seed(1)
+train_index <- sample(1:nrow(seeds),140)
+train_set <- seeds[train_index,]
+test_set <- seeds[train_index,]
+```
+##d)
+```{r}
+#install.packages("MASS")
+library(MASS)
+model <- lda(Class ~ ., data = train_set)
+```
+##e)
+```{r}
+predictions <- predict(model,test_set)
+predictions$class
+```
+##f)
+```{r}
+table <- table(predictions$class,test_set$Class)
+table
+```
+##g)The ARI for the classification result is 0.9342.
+```{r}
+#install.packages("e1071")
+library(e1071)
+classAgreement(table)$crand
+```

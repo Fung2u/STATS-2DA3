@@ -1,0 +1,58 @@
+---
+title: "2DA3_A4"
+author: "Jingru Feng"
+date: "2023-11-14"
+output: pdf_document
+---
+#Question 1
+```{r}
+set.seed(3456)
+sample(1:15,10,replace = TRUE)
+sample(1:20,5,replace = FALSE)
+x <- rnorm(5)
+print(x)
+```
+#Question 2
+##i)We find the top 5 nearest thing of unlabelled observation "x" is "blue circle". Because when K=5 there are 3 "blue circle",1 "yellow star" and 1 "red triangle". "blue circle" is the largest quantity.
+##ii)We find the top 9 nearest thing of unlabelled observation "x" is "yellow star". When K=6 there are 3 "yellow star", 3 "blue circle" and 1 "red triangle", whether k=9, the increased observation is 1 star and 1 triangle or 2 stars. In the end, "yellow star" is the largest quantity.
+
+#Question 3
+##a)
+```{r}
+seeds <- read.csv("/Users/fengjingru/Desktop/seeds.csv")
+seeds$Class <- as.factor(seeds$Class)
+```
+##b)
+```{r}
+library(dplyr)
+seeds_scaled <- scale(select(seeds, -Class))
+classes <- seeds$Class
+```
+##c)
+```{r}
+set.seed(6789)
+train_indices <- sample(1:nrow(seeds_scaled), 0.8 * nrow(seeds_scaled))
+train_set <- seeds_scaled[train_indices, ]
+test_set <- seeds_scaled[-train_indices, ]
+actual_classes <- classes[-train_indices]
+```
+##d)
+```{r}
+library(class)
+predicted_classes <- knn(train = train_set, test = test_set, cl = classes[train_indices], k = 3)
+predicted_classes
+```
+##e)
+```{r}
+tab1 <- table(Predicted = predicted_classes, Actual = actual_classes)
+tab1
+```
+##f)
+```{r}
+library(e1071)
+classAgreement(tab1)$crand
+```
+##g)
+```{r}
+1-classAgreement(tab1)$diag
+```

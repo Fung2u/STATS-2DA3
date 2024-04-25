@@ -1,0 +1,73 @@
+---
+title: "2DA3_A5"
+author: "Jingru Feng"
+date: "2023-11-26"
+output: pdf_document
+---
+#Question1
+##a)
+i)Two components give the best result. 
+```{r}
+#install.packages("mclust")
+library(mclust)
+library(ggplot2)
+#install.packages("pgmm")
+library(pgmm)
+data(olive)
+scaled_data <- scale(olive[, -which(names(olive) == "Area")])
+mclust_result <- Mclust(scaled_data, G =1:3)
+print(mclust_result$BIC)
+```
+##a)ii)
+```{r}
+plot(mclust_result$BIC, xlab="Number of Components", ylab="BIC")
+```
+##b)
+ii)The ARI is 0.819.
+```{r}
+set.seed(1234)
+scaled_olive <- scale(olive[, -which(names(olive) == "Area")])
+mclust_gpcm <- Mclust(scaled_olive, G = 1:3, modelType= "gpcm")
+table(mclust_gpcm$classification)
+true_labels <- olive$Region
+predicted_clusters <- mclust_gpcm$classification
+ari_value <- mclust::adjustedRandIndex(true_labels,predicted_clusters)
+ari_value
+```
+##c)
+ii)The selected model use 7 components. 
+iii)The ARI is 0.870.
+```{r}
+set.seed(1234)
+olive_scaled <- scale(olive[, -which(names(olive) == "Region")])
+gpcm_model <- Mclust(olive_scaled, G = 1:9, modelType= "gpcm")
+clustering_table <- table(gpcm_model$classification)
+print(clustering_table)
+gpcm_model$G
+true_area <- olive$Area
+ari_area <- mclust::adjustedRandIndex(true_area,gpcm_model$classification)
+ari_area
+```
+#Question2
+##a)
+```{r}
+set.seed(4567)
+obs <- rnorm(30)
+obs
+```
+##b)
+```{r}
+sd_obs <- sd(obs)
+sprintf("%.4f", sd_obs)
+```
+##c)
+```{r}
+bootstrap_sd <- replicate(100, sd(sample(obs, replace = TRUE)))
+mean(bootstrap_sd)
+```
+##d)
+```{r}
+bootstrapped_estimate <- mean(bootstrap_sd)
+bias <- bootstrapped_estimate - sd_obs
+sprintf("%.5f", bias)
+```

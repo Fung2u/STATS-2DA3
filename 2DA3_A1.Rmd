@@ -1,0 +1,87 @@
+---
+title: "2DA3_A1"
+author: "Jingru Feng"
+date: "2023-09-25"
+output: pdf_document
+
+---
+#Question 1
+```{r}
+#install.packages('carData')
+library(carData)
+```
+##a)
+There are 6 columns and 397 rows in the dataset.
+```{r}
+#Salaries
+colnames(Salaries) #6
+rownames(Salaries) #397
+```
+##b)
+'Salary' describes nine-month salary, in dollars in 'Salaries' dataset. 
+```{r}
+??Salaries
+```
+##c)
+categorical variables: rank, discipline, sex
+continuous variables: yrs.since.phd, yrs.service, salary
+```{r}
+summary(Salaries)
+```
+##d)
+```{r}
+#install.packages("ggplot2")
+library(ggplot2)
+
+ggplot(Salaries, aes(x=yrs.since.phd, y=salary))+ geom_point(color="red")+labs(title = "Experience vs. Salary", x = "Years Since PhD", y = "Salary")
+
+```
+#Question 2
+```{r}
+#diamonds
+```
+##a)
+```{r}
+a <- ggplot(diamonds, aes(x=cut, fill=cut)) + geom_bar()
+a
+```
+##b)
+```{r}
+b <- ggplot(diamonds, aes(x=cut, fill=clarity)) + geom_bar()
+b
+```
+##c)
+```{r}
+#install.packages("gridExtra")
+library(gridExtra)
+
+grid.arrange(a,b,ncol=2)
+```
+#Question 3
+a) None improvement was the most reported level of Improvement. 
+b) Some Imrovement was the least reported level of Improvement. 
+c) For female patients in the Treated group showed showed the best (“Marked”) level of Improvement. 
+
+#Question 4
+```{r}
+mpg <- ggplot2::mpg
+mpg
+table(mpg$class)
+table(mpg$drv)
+library(ggplot2)
+library(likert)
+library(dplyr)
+library(tidyr)
+library(vcd)
+```
+##a)
+```{r}
+doubledecker(drv ~ class, data=mpg, main = "Double Decker plot")
+```
+##b)f
+##c)f
+##d)
+```{r}
+d <- ggplot(mpg, aes(x=class, fill=drv)) + geom_bar()
+d
+```

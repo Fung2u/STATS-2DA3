@@ -1,0 +1,61 @@
+---
+title: "2DA3_A2"
+author: "Jingru Feng"
+date: "2023-10-14"
+output: pdf_document
+latex_engine: xelatex
+---
+# Question 1
+##a) The best number of clusters to choose is 2.
+By the silhouette measures, the highest average silhouette width gives the best k. The average silhouette width of the k=2 cluster is 0.19, which is the largest average in all cases. So, the best number of clusters to choose is 2. 
+##b) The worst number of clusters to choose is 5.
+By the silhouette measures, the highest average silhouette width gives the best k. From the figures, the average silhouette width of k=5 cluster is 0.09, which is the lowest. So, the worst cluster number is 5.
+
+# Question 2
+##a) 
+k-means clustering: the cluster centers are means. 
+k-medoids clustering: the cluster centers are medoids. 
+##b)
+No. Because k-means clustering is not the most appropriate. And these three clusters are not spherical whcih means we cannot achieve the optimal clustering results. 
+
+# Question 3
+```{r}
+#install.packages('s20x')
+library(s20x)
+data(course.df)
+course.df
+??course.df
+head(course.df)
+str(course.df)
+```
+##a)
+```{r}
+library(ggplot2)
+a <- ggplot(course.df, aes(x= Degree, y= Exam)) + geom_boxplot() + 
+    labs(x= "Degree", y= "Exam Score") + theme_minimal()
+a
+
+b <- ggplot(course.df, aes(x= Degree, y= Exam, fill= Gender)) +geom_boxplot() +
+    labs(x= "Degree", y= "Exam Score") + theme_minimal()
+b
+```
+##b)
+```{r}
+#install.packages('gridExtra')
+library(gridExtra)
+grid.arrange(a, b, ncol=1)
+```
+##c)
+```{r}
+ggplot(course.df, aes(x= interaction(Degree, Gender), fill= Gender)) + geom_bar() + theme_minimal()
+```
+##d)
+```{r}
+#install.packages('GGally')
+library(GGally)
+ggparcoord(data = course.df, columns = c("Assign", "Test", "B", "C", "MC"), 
+           groupColumn = "Grade", order = "allClass", scale = "uniminmax") + theme_minimal()
+```
+# Question 4
+##a)
+In my opinion, CaO is the best predictor variable for separating out the responses. Because there is a very clear distinction between Body part and Glaze part.
